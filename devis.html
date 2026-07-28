@@ -206,30 +206,6 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
             <label><input type="checkbox" name="Mission souhaitee" value="Je ne sais pas encore"> Je ne sais pas encore</label>
           </div>
         </div>
-        <div class="champ full" style="margin-top:20px">
-          <label for="budget">Budget envisagé pour la mission</label>
-          <select id="budget" name="Budget mission">
-            <option value="" selected disabled>Choisissez une fourchette…</option>
-            <option>Moins de 2 000 €</option>
-            <option>2 000 à 5 000 €</option>
-            <option>5 000 à 10 000 €</option>
-            <option>10 000 à 25 000 €</option>
-            <option>Plus de 25 000 €</option>
-            <option>À définir ensemble</option>
-          </select>
-          <p class="aide">Honoraires de la mission (coordination SPS, prévention ou audit) — à ne pas confondre avec le montant des travaux ci-dessous. Une simple fourchette suffit.</p>
-        </div>
-        <div class="champ full" style="margin-top:20px">
-          <label for="critere">Critère de validation du devis</label>
-          <select id="critere" name="Critere de validation">
-            <option value="" selected disabled>Choisissez…</option>
-            <option>Moins disant (prix le plus bas)</option>
-            <option>Valeur technique</option>
-            <option>50 / 50 (prix et technique)</option>
-            <option>Autre</option>
-          </select>
-          <p class="aide">Sur quel critère principal l'offre sera-t-elle retenue ?</p>
-        </div>
       </fieldset>
 
       <fieldset>
@@ -255,15 +231,8 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
             <input id="lieu" name="Localisation" type="text" placeholder="Ex. Saint-Cloud (92)">
           </div>
           <div class="champ">
-            <label for="montant">Montant estimatif des travaux</label>
-            <select id="montant" name="Montant estimatif des travaux">
-              <option value="" selected disabled>Choisissez…</option>
-              <option>Moins de 500 k€</option>
-              <option>500 k€ à 3 M€</option>
-              <option>3 M€ à 10 M€</option>
-              <option>Plus de 10 M€</option>
-              <option>Je ne sais pas encore</option>
-            </select>
+            <label for="montant">Montant des travaux (€ HT)</label>
+            <input id="montant" name="Montant des travaux HT (euros)" type="number" min="0" step="1000" inputmode="numeric" placeholder="Ex. 850000">
           </div>
           <div class="champ">
             <label for="entreprises">Nombre d'entreprises / corps d'état prévus</label>
@@ -276,16 +245,69 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
             </select>
           </div>
           <div class="champ">
-            <label for="duree">Durée prévisionnelle du chantier</label>
-            <input id="duree" name="Duree previsionnelle" type="text" placeholder="Ex. 6 mois">
+            <label for="duree">Durée prévisionnelle du chantier (en mois)</label>
+            <input id="duree" name="Duree previsionnelle (mois)" type="number" min="0" step="1" inputmode="numeric" placeholder="Ex. 6">
           </div>
           <div class="champ">
-            <label for="demarrage">Date de démarrage envisagée</label>
-            <input id="demarrage" name="Date de demarrage" type="text" placeholder="Ex. septembre 2026">
+            <label for="demarrage">Date de démarrage envisagée (mois / année)</label>
+            <input id="demarrage" name="Date de demarrage" type="month">
+          </div>
+          <div class="champ">
+            <label for="phase">Phase en cours</label>
+            <select id="phase" name="Phase en cours">
+              <option value="" selected disabled>Choisissez…</option>
+              <option>Esquisse</option>
+              <option>APS — Avant-projet sommaire</option>
+              <option>APD — Avant-projet définitif</option>
+              <option>PRO / DCE</option>
+              <option>Conception</option>
+              <option>Réalisation (chantier en cours)</option>
+            </select>
+          </div>
+          <div class="champ full">
+            <label>Particularités du chantier</label>
+            <div class="cases">
+              <label><input type="checkbox" name="Particularites" value="Amiante"> Amiante</label>
+              <label><input type="checkbox" name="Particularites" value="Plomb"> Plomb</label>
+              <label><input type="checkbox" name="Particularites" value="Site occupé / en exploitation"> Site occupé / en exploitation</label>
+              <label><input type="checkbox" name="Particularites" value="Coactivité (plusieurs entreprises)"> Coactivité</label>
+              <label><input type="checkbox" name="Particularites" value="Travaux en hauteur"> Travaux en hauteur</label>
+              <label><input type="checkbox" name="Particularites" value="Proximité du public / ERP"> Proximité du public / ERP</label>
+            </div>
           </div>
           <div class="champ full">
             <label for="message">Précisions sur le projet</label>
-            <textarea id="message" name="Precisions" placeholder="Phase (conception, chantier…), particularités (coactivité, site occupé, amiante/plomb, échéance impérative…), ou toute question."></textarea>
+            <textarea id="message" name="Precisions" placeholder="Échéance impérative, particularités non listées ci-dessus, ou toute question."></textarea>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Budget &amp; attribution</legend>
+        <div class="grid">
+          <div class="champ">
+            <label for="budget">Budget envisagé pour la mission</label>
+            <select id="budget" name="Budget mission">
+              <option value="" selected disabled>Choisissez une fourchette…</option>
+              <option>Moins de 2 000 €</option>
+              <option>2 000 à 5 000 €</option>
+              <option>5 000 à 10 000 €</option>
+              <option>10 000 à 25 000 €</option>
+              <option>Plus de 25 000 €</option>
+              <option>À définir ensemble</option>
+            </select>
+            <p class="aide">Honoraires de la mission (coordination SPS, prévention ou audit) — distinct du montant des travaux.</p>
+          </div>
+          <div class="champ">
+            <label for="critere">Critère de validation du devis</label>
+            <select id="critere" name="Critere de validation">
+              <option value="" selected disabled>Choisissez…</option>
+              <option>Moins disant (prix le plus bas)</option>
+              <option>Valeur technique</option>
+              <option>50 / 50 (prix et technique)</option>
+              <option>Autre</option>
+            </select>
+            <p class="aide">Sur quel critère principal l'offre sera-t-elle retenue ?</p>
           </div>
         </div>
       </fieldset>
