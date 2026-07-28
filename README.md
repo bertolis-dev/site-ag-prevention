@@ -4,7 +4,7 @@ Page vitrine publique d'**AG Prévention** (coordination SPS, prévention HSE, a
 
 - Site **100 % statique** (HTML/CSS + images), sans dépendance serveur.
 - Hébergé sur **GitHub Pages** et servi sur le domaine **https://www.ag-prevention.com**.
-- Déploiement **automatique** à chaque push sur `main` via `.github/workflows/pages.yml`.
+- Déploiement **automatique** à chaque push sur `main` (GitHub Pages, source « Deploy from a branch » → `main` / racine).
 
 ## Structure
 
@@ -18,7 +18,11 @@ CNAME               Domaine personnalisé (www.ag-prevention.com)
 ## Modifier le site
 
 Éditer `index.html` (ou les images de `img/`), commiter et pousser sur `main` :
-le workflow republie automatiquement. Compter 1 à 2 minutes après le push.
+GitHub Pages republie automatiquement. Compter 1 à 2 minutes après le push.
+
+> Activation initiale (une seule fois) : dépôt → **Settings → Pages →
+> Build and deployment → Source : « Deploy from a branch » → Branch : `main` /
+> `(root)` → Save**. Puis renseigner le domaine `www.ag-prevention.com`.
 
 ## DNS (chez OVH)
 
