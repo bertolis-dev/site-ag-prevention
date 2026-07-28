@@ -133,6 +133,16 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
       <input type="hidden" name="_template" value="table">
       <input type="hidden" name="_captcha" value="false">
       <input type="hidden" name="_next" value="https://www.ag-prevention.com/merci.html">
+      <!-- Accusé de réception automatique envoyé au demandeur (adresse du champ « email ») -->
+      <input type="hidden" name="_autoresponse" value="Bonjour,
+
+Merci pour votre demande de devis auprès d'AG Prévention. Nous l'avons bien reçue et nous revenons vers vous avec une proposition détaillée sous 24 heures ouvrées.
+
+Pour toute question d'ici là, écrivez-nous à contact@ag-prevention.com ou appelez le 06 51 32 18 54.
+
+Bien cordialement,
+AG Prévention — Coordination SPS · Prévention HSE · Audit sécurité
+https://www.ag-prevention.com">
       <!-- Anti-spam (piège à robots, laisser vide) -->
       <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 
@@ -185,8 +195,8 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
             <input id="role-autre" name="Votre role (precisez)" type="text" placeholder="Précisez votre rôle" aria-label="Précisez votre rôle" style="display:none">
           </div>
           <div class="champ">
-            <label for="email">Email <span class="req">*</span></label>
-            <input id="email" name="email" type="email" required autocomplete="email">
+            <label for="email">Votre email <span class="req">*</span></label>
+            <input id="email" name="email" type="email" required autocomplete="email" placeholder="Pour notre réponse + votre accusé de réception">
           </div>
           <div class="champ">
             <label for="tel">Téléphone</label>
