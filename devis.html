@@ -71,6 +71,13 @@ legend{font-family:"Archivo",sans-serif;font-weight:700;font-size:19px;padding:0
 .cases input{accent-color:var(--or);width:16px;height:16px}
 .aide{font-size:13px;color:rgba(21,21,21,.58);margin:4px 0 0}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.siret-row{display:flex;gap:10px;align-items:stretch}
+.siret-row input{flex:1}
+.btn-mini{white-space:nowrap;font-family:inherit;font-weight:600;font-size:14px;background:var(--noir);color:var(--blanc);border:1px solid var(--noir);padding:0 20px;cursor:pointer;transition:background .15s ease}
+.btn-mini:hover{background:#000}
+.btn-mini:disabled{opacity:.5;cursor:default}
+.aide.ok{color:#3d7a3d}
+.aide.warn{color:#8a6d1f}
 
 .actions{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:12px}
 .btn{display:inline-block;padding:15px 30px;text-decoration:none;font-family:inherit;font-weight:600;font-size:15.5px;background:var(--or);color:var(--noir);border:1px solid var(--or);cursor:pointer;transition:background .18s ease}
@@ -145,8 +152,15 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
           </div>
           <div class="champ full">
             <label for="siret">SIRET du maître d'ouvrage</label>
-            <input id="siret" name="SIRET maitre d ouvrage" type="text" inputmode="numeric" placeholder="Ex. 100 581 404 00017 (14 chiffres)">
-            <p class="aide">Numéro à 14 chiffres de l'entité à qui le devis sera libellé (le maître d'ouvrage).</p>
+            <div class="siret-row">
+              <input id="siret" name="SIRET maitre d ouvrage" type="text" inputmode="numeric" placeholder="Ex. 100 581 404 00017 (14 chiffres)">
+              <button type="button" id="siret-btn" class="btn-mini">Rechercher</button>
+            </div>
+            <p class="aide" id="siret-status">Numéro à 14 chiffres de l'entité à qui le devis sera libellé. Renseignez-le puis cliquez « Rechercher » pour remplir automatiquement la raison sociale et l'adresse.</p>
+          </div>
+          <div class="champ full">
+            <label for="adresse-moa">Adresse du maître d'ouvrage</label>
+            <input id="adresse-moa" name="Adresse maitre d ouvrage" type="text" placeholder="Se remplit automatiquement depuis le SIRET (modifiable)" autocomplete="street-address">
           </div>
           <div class="champ full">
             <label for="role">Vous êtes</label>
@@ -312,6 +326,68 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
     }
     bindAutre("nature", "nature-autre");
     bindAutre("role", "role-autre");
+  })();
+
+  // Recherche entreprise par SIRET (API publique recherche-entreprises.api.gouv.fr, sans clé)
+  // → remplit automatiquement la raison sociale et l'adresse du maître d'ouvrage.
+  (function () {
+    var input = document.getElementById("siret");
+    var btn = document.getElementById("siret-btn");
+    var status = document.getElementById("siret-status");
+    var societe = document.getElementById("societe");
+    var adresse = document.getElementById("adresse-moa");
+    if (!input || !btn) return;
+
+    function setStatus(msg, cls) {
+      status.textContent = msg;
+      status.className = "aide" + (cls ? " " + cls : "");
+    }
+
+    async function lookup() {
+      var raw = (input.value || "").replace(/[^0-9]/g, "");
+      if (raw.length !== 14) {
+        setStatus("Entrez d'abord un SIRET à 14 chiffres.", "warn");
+        input.focus();
+        return;
+      }
+      btn.disabled = true;
+      var label = btn.textContent;
+      btn.textContent = "Recherche…";
+      setStatus("Recherche en cours…");
+      try {
+        var url = "https://recherche-entreprises.api.gouv.fr/search?q=" + raw + "&page=1&per_page=1";
+        var r = await fetch(url, { headers: { accept: "application/json" } });
+        if (!r.ok) throw new Error("http");
+        var data = await r.json();
+        var res = data && data.results && data.results[0];
+        if (!res) {
+          setStatus("Aucune entreprise trouvée pour ce SIRET. Vous pouvez saisir l'adresse manuellement.", "warn");
+          return;
+        }
+        var etab = (res.matching_etablissements && res.matching_etablissements[0]) || res.siege || {};
+        var nom = res.nom_complet || res.nom_raison_sociale || "";
+        var adr = etab.adresse || "";
+        if (nom && societe && !societe.value.trim()) societe.value = nom;
+        if (adr && adresse) adresse.value = adr;
+        var ferme = etab.etat_administratif && etab.etat_administratif !== "A";
+        setStatus(
+          "Entreprise trouvée : " + (nom || "—") + (adr ? " · " + adr : "") +
+          (ferme ? " (⚠ établissement signalé comme fermé)" : ""),
+          ferme ? "warn" : "ok"
+        );
+      } catch (e) {
+        setStatus("Recherche indisponible pour le moment — saisissez l'adresse manuellement.", "warn");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = label;
+      }
+    }
+
+    btn.addEventListener("click", lookup);
+    // Recherche automatique dès que 14 chiffres sont saisis / collés.
+    input.addEventListener("change", function () {
+      if ((input.value || "").replace(/[^0-9]/g, "").length === 14) lookup();
+    });
   })();
 </script>
 
