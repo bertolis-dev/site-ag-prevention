@@ -336,6 +336,7 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
     var status = document.getElementById("siret-status");
     var societe = document.getElementById("societe");
     var adresse = document.getElementById("adresse-moa");
+    var lieu = document.getElementById("lieu");
     if (!input || !btn) return;
 
     function setStatus(msg, cls) {
@@ -369,6 +370,14 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
         var adr = etab.adresse || "";
         if (nom && societe && !societe.value.trim()) societe.value = nom;
         if (adr && adresse) adresse.value = adr;
+        // Pré-remplit la localisation de l'opération (ville + dép.), sans écraser une saisie existante.
+        if (lieu && !lieu.value.trim()) {
+          var cp = etab.code_postal || "";
+          var ville = etab.libelle_commune || "";
+          var dept = cp ? cp.slice(0, 2) : "";
+          if (ville) lieu.value = ville + (dept ? " (" + dept + ")" : "");
+          else if (cp) lieu.value = cp;
+        }
         var ferme = etab.etat_administratif && etab.etat_administratif !== "A";
         setStatus(
           "Entreprise trouvée : " + (nom || "—") + (adr ? " · " + adr : "") +
