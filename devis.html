@@ -144,6 +144,11 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
             <input id="tel" name="Telephone" type="tel" autocomplete="tel">
           </div>
           <div class="champ full">
+            <label for="siret">SIRET du maître d'ouvrage</label>
+            <input id="siret" name="SIRET maitre d ouvrage" type="text" inputmode="numeric" placeholder="Ex. 100 581 404 00017 (14 chiffres)">
+            <p class="aide">Numéro à 14 chiffres de l'entité à qui le devis sera libellé (le maître d'ouvrage).</p>
+          </div>
+          <div class="champ full">
             <label for="role">Vous êtes</label>
             <select id="role" name="Votre role">
               <option value="" selected disabled>Choisissez…</option>
@@ -155,6 +160,7 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
               <option>Particulier</option>
               <option>Autre</option>
             </select>
+            <input id="role-autre" name="Votre role (precisez)" type="text" placeholder="Précisez votre rôle" aria-label="Précisez votre rôle" style="display:none">
           </div>
         </div>
       </fieldset>
@@ -289,19 +295,23 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
 </footer>
 
 <script>
-  // Affiche le champ « Précisez » quand « Autre » est choisi dans Nature de l'opération.
+  // Affiche un champ « Précisez » quand « Autre » est choisi (Nature de l'opération, Vous êtes…).
   (function () {
-    var sel = document.getElementById("nature");
-    var inp = document.getElementById("nature-autre");
-    if (!sel || !inp) return;
-    function toggle() {
-      var autre = sel.value === "Autre";
-      inp.style.display = autre ? "" : "none";
-      inp.required = autre;
-      if (!autre) inp.value = "";
+    function bindAutre(selId, inpId) {
+      var sel = document.getElementById(selId);
+      var inp = document.getElementById(inpId);
+      if (!sel || !inp) return;
+      function toggle() {
+        var autre = sel.value === "Autre";
+        inp.style.display = autre ? "" : "none";
+        inp.required = autre;
+        if (!autre) inp.value = "";
+      }
+      sel.addEventListener("change", toggle);
+      toggle();
     }
-    sel.addEventListener("change", toggle);
-    toggle();
+    bindAutre("nature", "nature-autre");
+    bindAutre("role", "role-autre");
   })();
 </script>
 
