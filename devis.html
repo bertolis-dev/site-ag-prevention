@@ -144,8 +144,8 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
             <input id="tel" name="Telephone" type="tel" autocomplete="tel">
           </div>
           <div class="champ full">
-            <label for="role">Vous êtes <span class="req">*</span></label>
-            <select id="role" name="Votre role" required>
+            <label for="role">Vous êtes</label>
+            <select id="role" name="Votre role">
               <option value="" selected disabled>Choisissez…</option>
               <option>Maître d'ouvrage</option>
               <option>Maître d'œuvre / architecte</option>
@@ -169,6 +169,19 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
             <label><input type="checkbox" name="Mission souhaitee" value="Audit / conseil sécurité"> Audit / conseil</label>
             <label><input type="checkbox" name="Mission souhaitee" value="Je ne sais pas encore"> Je ne sais pas encore</label>
           </div>
+        </div>
+        <div class="champ full" style="margin-top:20px">
+          <label for="budget">Budget envisagé pour la mission</label>
+          <select id="budget" name="Budget mission">
+            <option value="" selected disabled>Choisissez une fourchette…</option>
+            <option>Moins de 2 000 €</option>
+            <option>2 000 à 5 000 €</option>
+            <option>5 000 à 10 000 €</option>
+            <option>10 000 à 25 000 €</option>
+            <option>Plus de 25 000 €</option>
+            <option>À définir ensemble</option>
+          </select>
+          <p class="aide">Honoraires de la mission (coordination SPS, prévention ou audit) — à ne pas confondre avec le montant des travaux ci-dessous. Une simple fourchette suffit.</p>
         </div>
       </fieldset>
 
