@@ -212,6 +212,7 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
               <option>Maintenance / travaux sur site exploité</option>
               <option>Autre</option>
             </select>
+            <input id="nature-autre" name="Nature (precisez)" type="text" placeholder="Précisez la nature de l'opération" aria-label="Précisez la nature de l'opération" style="display:none">
           </div>
           <div class="champ">
             <label for="lieu">Localisation (ville / département)</label>
@@ -286,6 +287,23 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
     </div>
   </div>
 </footer>
+
+<script>
+  // Affiche le champ « Précisez » quand « Autre » est choisi dans Nature de l'opération.
+  (function () {
+    var sel = document.getElementById("nature");
+    var inp = document.getElementById("nature-autre");
+    if (!sel || !inp) return;
+    function toggle() {
+      var autre = sel.value === "Autre";
+      inp.style.display = autre ? "" : "none";
+      inp.required = autre;
+      if (!autre) inp.value = "";
+    }
+    sel.addEventListener("change", toggle);
+    toggle();
+  })();
+</script>
 
 </body>
 </html>
