@@ -125,24 +125,9 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
 
 <section class="zone">
   <div class="wrap">
-    <!-- FormSubmit : envoi vers la boîte AG Prévention, sans serveur.
-         À activer une seule fois (voir le 1er email reçu après le 1er envoi). -->
-    <form action="https://formsubmit.co/contact@ag-prevention.com" method="POST">
-      <!-- Réglages FormSubmit -->
-      <input type="hidden" name="_subject" value="Nouvelle demande de devis — site AG Prévention">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="https://www.ag-prevention.com/merci.html">
-      <!-- Accusé de réception automatique envoyé au demandeur (adresse du champ « email ») -->
-      <input type="hidden" name="_autoresponse" value="Bonjour,
-
-Merci pour votre demande de devis auprès d'AG Prévention. Nous l'avons bien reçue et nous revenons vers vous avec une proposition détaillée sous 24 heures ouvrées.
-
-Pour toute question d'ici là, écrivez-nous à contact@ag-prevention.com ou appelez le 06 51 32 18 54.
-
-Bien cordialement,
-AG Prévention — Coordination SPS · Prévention HSE · Audit sécurité
-https://www.ag-prevention.com">
+    <!-- Envoi via la fonction Microsoft Graph de la Static Web App (mail depuis
+         contact@ag-prevention.com + accusé au demandeur). Soumission en JS ci-dessous. -->
+    <form id="devis-form" action="https://mobile.ag-prevention.com/api/devis" method="POST">
       <!-- Anti-spam (piège à robots, laisser vide) -->
       <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 
@@ -327,9 +312,10 @@ https://www.ag-prevention.com">
       </fieldset>
 
       <div class="actions">
-        <button class="btn" type="submit">Envoyer ma demande</button>
+        <button class="btn" type="submit" id="devis-submit">Envoyer ma demande</button>
         <small>ou écrivez-nous directement : <a href="mailto:contact@ag-prevention.com">contact@ag-prevention.com</a></small>
       </div>
+      <p class="aide" id="devis-status" role="status" aria-live="polite" style="margin-top:6px"></p>
 
       <p class="rgpd">Les informations transmises via ce formulaire sont utilisées exclusivement pour traiter votre demande de devis et vous recontacter. Elles ne sont ni revendues ni cédées à des tiers. Vous pouvez demander leur suppression à tout moment en écrivant à contact@ag-prevention.com.</p>
     </form>
@@ -483,6 +469,59 @@ https://www.ag-prevention.com">
     // Recherche auto dès qu'un SIRET de 14 chiffres est saisi / collé.
     input.addEventListener("change", function () {
       if ((input.value || "").replace(/[^0-9]/g, "").length === 14) lookup();
+    });
+  })();
+
+  // Soumission du formulaire vers la fonction Graph (/api/devis) : envoi des
+  // e-mails depuis contact@ag-prevention.com, puis redirection vers « Merci ».
+  (function () {
+    var form = document.getElementById("devis-form");
+    var submit = document.getElementById("devis-submit");
+    var status = document.getElementById("devis-status");
+    if (!form) return;
+
+    function setStatus(msg, cls) {
+      status.textContent = msg || "";
+      status.className = "aide" + (cls ? " " + cls : "");
+    }
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault(); // (la validation « required » du navigateur a déjà eu lieu)
+
+      // Rassemble les champs (les cases multiples -> tableaux).
+      var fd = new FormData(form);
+      var data = {};
+      fd.forEach(function (v, k) {
+        if (k === "_honey") { data[k] = v; return; }
+        if (data[k] !== undefined) {
+          if (!Array.isArray(data[k])) data[k] = [data[k]];
+          data[k].push(v);
+        } else {
+          data[k] = v;
+        }
+      });
+
+      submit.disabled = true;
+      var label = submit.textContent;
+      submit.textContent = "Envoi en cours…";
+      setStatus("Envoi de votre demande…");
+      try {
+        // Content-Type « text/plain » => requête simple, pas de préflight CORS.
+        var r = await fetch(form.action, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          body: JSON.stringify(data),
+        });
+        if (!r.ok) throw new Error("http " + r.status);
+        window.location.href = "merci.html";
+      } catch (err) {
+        submit.disabled = false;
+        submit.textContent = label;
+        setStatus(
+          "Désolé, l'envoi a échoué. Réessayez, ou écrivez-nous directement à contact@ag-prevention.com.",
+          "warn"
+        );
+      }
     });
   })();
 </script>
