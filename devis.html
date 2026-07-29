@@ -221,9 +221,9 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
             </select>
             <input id="nature-autre" name="Nature (precisez)" type="text" placeholder="Précisez la nature de l'opération" aria-label="Précisez la nature de l'opération" style="display:none">
           </div>
-          <div class="champ">
-            <label for="lieu">Localisation (ville / département)</label>
-            <input id="lieu" name="Localisation" type="text" placeholder="Ex. Saint-Cloud (92)">
+          <div class="champ full">
+            <label for="lieu">Adresse du chantier</label>
+            <input id="lieu" name="Localisation" type="text" placeholder="N°, rue, code postal, ville" autocomplete="off">
           </div>
           <div class="champ">
             <label for="montant">Montant des travaux (€ HT)</label>
@@ -233,8 +233,7 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
             <label for="entreprises">Nombre d'entreprises / corps d'état prévus</label>
             <select id="entreprises" name="Nombre d entreprises">
               <option value="" selected disabled>Choisissez…</option>
-              <option>1 seule entreprise</option>
-              <option>2 à 9</option>
+              <option>1 à 10</option>
               <option>10 ou plus</option>
               <option>Je ne sais pas encore</option>
             </select>
@@ -265,48 +264,13 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
               <label><input type="checkbox" name="Particularites" value="Amiante"> Amiante</label>
               <label><input type="checkbox" name="Particularites" value="Plomb"> Plomb</label>
               <label><input type="checkbox" name="Particularites" value="Site occupé / en exploitation"> Site occupé / en exploitation</label>
-              <label><input type="checkbox" name="Particularites" value="Coactivité (plusieurs entreprises)"> Coactivité</label>
-              <label><input type="checkbox" name="Particularites" value="Travaux en hauteur"> Travaux en hauteur</label>
               <label><input type="checkbox" name="Particularites" value="Proximité du public / ERP"> Proximité du public / ERP</label>
-              <label><input type="checkbox" name="Particularites" value="Désamiantage SS3 / SS4"> Désamiantage SS3 / SS4</label>
-              <label><input type="checkbox" name="Particularites" value="Gaz / ATEX"> Gaz / ATEX</label>
               <label><input type="checkbox" name="Particularites" value="Travaux sur voie publique"> Travaux sur voie publique</label>
-              <label><input type="checkbox" name="Particularites" value="Nuisances sonores"> Nuisances sonores</label>
             </div>
           </div>
           <div class="champ full">
             <label for="message">Précisions sur le projet</label>
             <textarea id="message" name="Precisions" placeholder="Échéance impérative, particularités non listées ci-dessus, ou toute question."></textarea>
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Budget &amp; attribution</legend>
-        <div class="grid">
-          <div class="champ">
-            <label for="budget">Budget envisagé pour la mission</label>
-            <select id="budget" name="Budget mission">
-              <option value="" selected disabled>Choisissez une fourchette…</option>
-              <option>Moins de 2 000 €</option>
-              <option>2 000 à 5 000 €</option>
-              <option>5 000 à 10 000 €</option>
-              <option>10 000 à 25 000 €</option>
-              <option>Plus de 25 000 €</option>
-              <option>À définir ensemble</option>
-            </select>
-            <p class="aide">Honoraires de la mission (coordination SPS, prévention ou audit) — distinct du montant des travaux.</p>
-          </div>
-          <div class="champ">
-            <label for="critere">Critère de validation du devis</label>
-            <select id="critere" name="Critere de validation">
-              <option value="" selected disabled>Choisissez…</option>
-              <option>Moins disant (prix le plus bas)</option>
-              <option>Valeur technique</option>
-              <option>50 / 50 (prix et technique)</option>
-              <option>Autre</option>
-            </select>
-            <p class="aide">Sur quel critère principal l'offre sera-t-elle retenue ?</p>
           </div>
         </div>
       </fieldset>
@@ -395,12 +359,6 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
       if (nom && societe) societe.value = nom;
       if (etab.siret && siret) siret.value = etab.siret;
       if (etab.adresse && adresse) adresse.value = etab.adresse;
-      // Localisation de l'opération (ville + dép.), sans écraser une saisie existante.
-      if (lieu && !lieu.value.trim()) {
-        var cp = etab.code_postal || "", ville = etab.libelle_commune || "", dept = cp ? cp.slice(0, 2) : "";
-        if (ville) lieu.value = ville + (dept ? " (" + dept + ")" : "");
-        else if (cp) lieu.value = cp;
-      }
       var ferme = etab.etat_administratif && etab.etat_administratif !== "A";
       setStatus(
         "Entreprise retenue : " + (nom || "—") + (etab.adresse ? " · " + etab.adresse : "") +
