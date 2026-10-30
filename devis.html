@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Demander un devis : AG Prévention</title>
-<meta name="description" content="Demandez un devis détaillé de coordination SPS, prévention HSE ou audit sécurité. Réponse sous 24 h ouvrées.">
+<meta name="description" content="Demandez un devis détaillé de coordination SPS, document unique (DUERP), prévention HSE ou audit sécurité. Réponse sous 24 h ouvrées.">
 <meta name="theme-color" content="#151515">
 <meta name="robots" content="index,follow">
 <link rel="icon" href="img/favicon-32.png" sizes="32x32">
@@ -117,8 +117,8 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
 <section class="entete">
   <div class="wrap">
     <span class="eyebrow">Demande de devis</span>
-    <h1>Décrivez votre opération, nous chiffrons la mission.</h1>
-    <p>Quelques informations essentielles suffisent pour qualifier la catégorie SPS et le périmètre. Plus votre description est précise, plus le devis sera juste. Nous répondons sous <strong>24 h ouvrées</strong>.</p>
+    <h1>Décrivez votre besoin, nous chiffrons la mission.</h1>
+    <p>Quelques informations essentielles suffisent pour qualifier le besoin et le périmètre : chantier pour une coordination SPS, entreprise ou site pour une démarche de prévention. Plus votre description est précise, plus le devis sera juste. Nous répondons sous <strong>24 h ouvrées</strong>.</p>
     <span class="badge">Réponse sous 24 h ouvrées, Île-de-France et national</span>
   </div>
 </section>
@@ -196,6 +196,7 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
           <label>Mission(s) souhaitée(s)</label>
           <div class="cases">
             <label><input type="checkbox" name="Mission souhaitee" value="Coordination SPS"> Coordination SPS</label>
+            <label><input type="checkbox" name="Mission souhaitee" value="Document unique (DUERP)"> Document unique (DUERP)</label>
             <label><input type="checkbox" name="Mission souhaitee" value="Prévention HSE"> Prévention HSE</label>
             <label><input type="checkbox" name="Mission souhaitee" value="Audit / conseil sécurité"> Audit / conseil</label>
             <label><input type="checkbox" name="Mission souhaitee" value="Je ne sais pas encore"> Je ne sais pas encore</label>
@@ -204,7 +205,39 @@ footer .legal{margin-top:36px;padding-top:20px;border-top:1px solid var(--trait)
       </fieldset>
 
       <fieldset>
-        <legend>Votre opération</legend>
+        <legend>Votre entreprise ou votre site (prévention, DUERP, audit)</legend>
+        <div class="grid">
+          <div class="champ">
+            <label for="secteur">Secteur d'activité</label>
+            <input id="secteur" name="Secteur d activite" type="text" placeholder="Ex. BTP, commerce, logistique, industrie">
+          </div>
+          <div class="champ">
+            <label for="effectif">Effectif concerné (salariés)</label>
+            <input id="effectif" name="Effectif concerne" type="number" min="0" step="1" inputmode="numeric" placeholder="Ex. 25">
+          </div>
+          <div class="champ">
+            <label for="nbsites">Nombre de sites</label>
+            <input id="nbsites" name="Nombre de sites" type="number" min="0" step="1" inputmode="numeric" placeholder="Ex. 1">
+          </div>
+          <div class="champ">
+            <label for="ut">Unités de travail (si connues)</label>
+            <input id="ut" name="Unites de travail" type="number" min="0" step="1" inputmode="numeric" placeholder="Ex. 5 (bureaux, atelier, entrepôt…)">
+          </div>
+          <div class="champ full">
+            <label for="existant">Démarche existante</label>
+            <select id="existant" name="Demarche existante">
+              <option value="" selected>Choisissez…</option>
+              <option>Aucun document unique</option>
+              <option>Document unique à mettre à jour</option>
+              <option>Plan de prévention ou audit à réaliser</option>
+              <option>Je ne sais pas</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Votre opération (coordination SPS)</legend>
         <div class="grid">
           <div class="champ">
             <label for="nature">Nature de l'opération</label>
